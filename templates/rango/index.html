@@ -6,6 +6,10 @@
     <head>
         <meta charset="UTF-8">
         <title>Rango</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="{% static "css/base.css" %}">
+        <!-- JavaScript -->
+        <script src="{% static "js/jquery.js" %}"></script>
     </head>
     <body>
         <h1>Rango says...</h1>
@@ -15,7 +19,8 @@
         </div>
         <div>
             <a href="/rango/about/">About</a> <br/>
-            <img src="{% static "images/rango_img.jpg" %}" alt="Picture of Rango"/>
+            <!-- Image -->
+            <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango"/>
         </div>
     </body>
 </html>

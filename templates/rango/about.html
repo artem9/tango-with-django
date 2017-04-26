@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>About</title>
+    </head>
+    <body>
+        <h1>This is test Django project</h1>
+        <p>This tutorial has been put together by <strong>{{ author }}</strong>.</p>
+        <a href="/rango/">Go to home Page</a> <br/>
+        <img src="{{ MEDIA_URL }}cat.jpg">
+    </body>
+</html>
