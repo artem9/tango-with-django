@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Rango</title>
+        <title>Rango - Categories</title>
     </head>
     <body>
         <div>
@@ -19,6 +19,11 @@
                 {% endif %}
             {% else %}
                 The specified category does not exists!
+            {% endif %}
+        </div>
+        <div>
+            {% if category %}
+                <a href="/rango/category/{{ category.slug }}/add_page/">Add Page</a> <br/>
             {% endif %}
         </div>
         <a href="/rango/">Go to home Page</a> <br/>
