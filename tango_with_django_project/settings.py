@@ -134,3 +134,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 LOGIN_URL = '/rango/login'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 604800  # one week
