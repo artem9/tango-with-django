@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rango',
     'registration',
+    'bootstrap_toolkit',
 ]
+
+AUTH_PROFILE_MODULE = 'registration.RegistrationProfile'
 
 # If True, users can register
 REGISTRATION_OPEN = True
