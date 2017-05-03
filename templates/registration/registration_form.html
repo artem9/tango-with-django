@@ -1,9 +1,15 @@
-{% extends 'rango/base.html'%}
+{% extends 'rango/base_bootstrap.html'%}
+{% load bootstrap_toolkit %}
+
+{% block title_block %}Sing Up{% endblock %}
+
 {% block body_block %}
-    <h1>Register Here</h1>
-    <form method="post" action=".">
+    <h2 class="form-signin-heading">Sign Up Here</h2>
+    <form role="form" method="post" action=".">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
+        <div class="form-group" >
+            {{ form|as_bootstrap }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}
