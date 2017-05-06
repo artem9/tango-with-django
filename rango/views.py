@@ -1,12 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from datetime import datetime
 
 
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from bing_search import run_query
 
@@ -79,7 +80,7 @@ def show_category(request, category_name_slug):
 
         # Retrieve all of the associated pages.
         # Note that filter() will return a list of page objects or an empty list
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=category).order_by('-views')
 
         # Adds our results list to the template context under name pages.
         context_dict['pages'] = pages
@@ -94,6 +95,22 @@ def show_category(request, category_name_slug):
         # the template will display the "no category" message for us.
         context_dict['pages'] = None
         context_dict['category'] = None
+
+    # New code added here to handle a POST request
+
+    # create a default query based on the category name
+    # to be shown in the search box
+    context_dict['query'] = category.name
+
+    result_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+
+        if query:
+            # Run our Bing function to get the results list!
+            result_list = run_query(query)
+            context_dict['query'] = query
+            context_dict['result_list'] = result_list
 
     # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
@@ -280,3 +297,75 @@ def search(request):
 
     return render(request, 'rango/search.html', {'result_list': result_list,
                                                  'query': query})
+
+
+def track_url(request):
+    page_id = None
+    url = '/rango/'
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+
+            try:
+                page = Page.objects.get(id=page_id)
+                page.views = page.views + 1
+                page.save()
+                url = page.url
+
+            except:
+                pass
+
+    return redirect(url)
+
+
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
+            return redirect('index')
+        else:
+            print (form.errors)
+
+    context_dict = {'form': form}
+
+    return render(request, 'rango/profile_registration.html', context_dict)
+
+
+@login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return redirect('index')
+
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm(
+        {'website': userprofile.website, 'picture': userprofile.picture}
+    )
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile', username)
+        else:
+            print (form.errors)
+
+    return render(request, 'rango/profile.html', {'userprofile': userprofile,
+                                                  'selecteduser': user,
+                                                  'form': form})
+
+
+@login_required
+def list_profiles(request):
+    userprofile_list = UserProfile.objects.all()
+
+    return render(request, 'rango/list_profiles.html',
+                  {'userprofile_list': userprofile_list})
