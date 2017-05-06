@@ -1,5 +1,6 @@
 import json
-import urllib, httplib
+import urllib
+import httplib
 
 
 def read_bing_key():

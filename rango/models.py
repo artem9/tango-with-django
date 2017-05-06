@@ -51,4 +51,4 @@ class UserProfile(models.Model):
         return self.user.username
 
     def __unicode__(self):
-        return self.user.username # for Python 2.7
+        return self.user.username  # for Python 2.7
