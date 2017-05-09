@@ -36,6 +36,42 @@ def populate():
          "views": 173}
     ]
 
+    pascal_pages = [
+        {"title": "Pascal - programming language",
+         "url": "http://progopedia.ru/language/pascal/",
+         "views": 16},
+        {"title": "Source codes Programming Pascal",
+         "url": "http://www.pascal.helpov.net/",
+         "views": 41},
+        {"title": "Online guide to language Pascal",
+         "url": "http://pascal.org.ua/",
+         "views": 19}
+    ]
+
+    perl_pages = [
+        {"title": "Track updates to Perl modules",
+         "url": "www.perlmodules.net",
+         "views": 13},
+        {"title": "The Perl Programming Language",
+         "url": "https://www.perl.org/",
+         "views": 27},
+        {"title": "A short excursion into Perl programming",
+         "url": "https://www.opennet.ru/docs/RUS/perl_help/",
+         "views": 32}
+    ]
+
+    php_pages = [
+        {"title": "What is PHP?",
+         "url": "http://php.net/manual/ru/intro-whatis.php",
+         "views": 54},
+        {"title": "All about PHP, MySQL and more!",
+         "url": "http://www.php.su/",
+         "views": 76},
+        {"title": "PHP - Interesting publications",
+         "url": "https://habrahabr.ru/hub/php/",
+         "views": 115}
+    ]
+
     other_pages = [
         {"title": "Bottle",
          "url": "http://bottlepy.org/docs/dev/",
@@ -47,7 +83,12 @@ def populate():
 
     cats = {"Python": {"pages": python_pages, "views": 128, "likes": 64},
             "Django": {"pages": django_pages, "views": 64, "likes": 32},
-            "Other Frameworks": {"pages": other_pages,  "views": 32, "likes": 16}
+            "Other Frameworks": {"pages": other_pages,  "views": 32, "likes": 16},
+            "Pascal": {"pages": pascal_pages, "views": 39, "likes": 8},
+            "Perl": {"pages": perl_pages, "views": 67, "likes": 17},
+            "PHP": {"pages": php_pages, "views": 178, "likes": 98},
+            "Prolog": {"pages": [], "views": 32, "likes": 16},
+            "Programming": {"pages": [], "views": 32, "likes": 16},
             }
 
     # If you want to add more catergories or pages,
@@ -63,7 +104,9 @@ def populate():
         return page
 
     def add_cat(name, views=0, likes=0):
-        category = Category.objects.get_or_create(name=name, views=views, likes=likes)[0]
+        category = Category.objects.get_or_create(name=name)[0]
+        category.views = views
+        category.likes = likes
         category.save()
         return category
 
