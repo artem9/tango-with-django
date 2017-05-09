@@ -7,5 +7,12 @@
     <h1>This is test Django project</h1>
     <p>This tutorial has been put together by <strong>{{ author }}</strong>.</p>
     <p>Site visits: {{ visits }}</p>
-    <img src="{{ MEDIA_URL }}cat.jpg">
+    <img src="{{ MEDIA_URL }}cat.jpg"><br/>
+    <button class="btn btn-primary" onclick="alert('You clicked the button using JavaScript');">Click Me - I run JavaScript</button>
+    <button class="btn btn-primary" id="about-btn">Click Me - I'm JavaScript on Speed</button>
+    <p>This is a example</p>
+    <p>This is another example</p>
+    <div id="msg">
+        Hello - I'm here for a JQuery Example too
+    </div>
 {% endblock %}
