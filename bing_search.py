@@ -1,6 +1,6 @@
-import json
 import urllib
-import httplib
+import os
+import requests
 
 
 def read_bing_key():
@@ -14,8 +14,11 @@ def read_bing_key():
     # http://docs.quantifiedcode.com/python-anti-patterns/maintainability/
 
     bing_api_key = None
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    key_file = os.path.join(cur_dir, 'bing.key')
+
     try:
-        with open('bing.key', 'r') as f:
+        with open(key_file, 'r') as f:
             bing_api_key = f.readline()
     except:
         raise IOError('bing.key file not found')
@@ -50,18 +53,14 @@ def run_query(search_terms):
     results = []
 
     try:
-        conn = httplib.HTTPSConnection('api.cognitive.microsoft.com')
-        conn.request("GET", "/bing/v5.0/search?%s" % params, "{body}", headers)
-        response = conn.getresponse()
-        data = response.read()
-
-        json_response = json.loads(data)
+        url = 'https://api.cognitive.microsoft.com/bing/v5.0/search'
+        r = requests.get(url, params=params, headers=headers)
+        json_response = r.json()
         for result in json_response['webPages']['value']:
             results.append({'title': result['name'],
                             'link': result['url'],
                             'summary': result['snippet']})
 
-        conn.close()
     except:
         print("Error when querying the Bing API")
 
